@@ -47,6 +47,6 @@ RUN sed -i 's#localhost#10.0.9.3#' /app/wordpress/wp-config.php
 
 EXPOSE 80
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-RUN /usr/local/bin/docker-entrypoint.sh
+CMD /usr/local/bin/docker-entrypoint.sh
 
 

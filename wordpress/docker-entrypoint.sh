@@ -13,13 +13,7 @@ cat > .htaccess <<-'EOF'
   # END WordPress
 EOF
 chown apache:apache .htaccess
-
 # set apache as owner/group
-chown -R apache:apache /app
-
-echo "[i] Starting daemon..."
-exec httpd -DFOREGROUND
-
 chown -R apache:apache /app
 
 echo "[i] Starting daemon..."
