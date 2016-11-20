@@ -15,14 +15,11 @@ RUN rm -rf /var/cache/apk/*
 
 
 RUN mkdir /app && chown -R apache:apache /app && \
-sed -i 's#^DocumentRoot ".*#DocumentRoot "/app/wordpress"#g' /etc/apache2/httpd.conf && \ #"
+sed -i 's#^DocumentRoot ".*#DocumentRoot "/app/wordpress"#g' /etc/apache2/httpd.conf && \
 sed -i 's#AllowOverride none#AllowOverride All#' /etc/apache2/httpd.conf && \
 echo "Success"
 
 RUN mkdir -p /run/apache2
-
-ADD scripts/run.sh /scripts/run.sh
-RUN chmod -R 755 /scripts
 
 # VOLUME /app
 WORKDIR /app/wordpress
@@ -30,23 +27,12 @@ WORKDIR /app/wordpress
 
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
-RUN { \
-		echo 'opcache.memory_consumption=128'; \
-		echo 'opcache.interned_strings_buffer=8'; \
-		echo 'opcache.max_accelerated_files=4000'; \
-		echo 'opcache.revalidate_freq=2'; \
-		echo 'opcache.fast_shutdown=1'; \
-		echo 'opcache.enable_cli=1'; \
-	} > /usr/local/etc/php/conf.d/opcache-recommended.ini
-
 
 ENV WORDPRESS_VERSION "4.6.1-fr_FR"
 ENV WORDPRESS_MD5 "47698f1e8c41a024e38a2ee233fa076a"
 
 RUN set -x \
-	&& curl -o wordpress.tar.gz -fSL "https://wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz" \
-	&& echo "${WORDPRESS_MD5} wordpress-${WORDPRESS_VERSION}.tar.gz" | md5sum -c - \
-
+	&& curl -o wordpress.tar.gz -fSL "https://fr.wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz" \
 	&& tar -xzf wordpress.tar.gz -C /app/ \
 	&& rm wordpress.tar.gz \
 	&& chown -R apache:apache /app/wordpress
