@@ -38,7 +38,6 @@ RUN set -x \
 	&& chown -R apache:apache /app/wordpress
 
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
 
 RUN mv  /app/wordpress/wp-config-sample.php /app/wordpress/wp-config.php
 RUN sed -i 's#votre_nom_de_bdd#wordpress#' /app/wordpress/wp-config.php
@@ -46,11 +45,7 @@ RUN sed -i 's#votre_utilisateur_de_bdd#wordpress#' /app/wordpress/wp-config.php
 RUN sed -i 's#votre_mdp_de_bdd#w0rdpressp@SS#' /app/wordpress/wp-config.php
 RUN sed -i 's#localhost#10.0.9.3#' /app/wordpress/wp-config.php
 
-
-
 EXPOSE 80
-# ENTRYPOINT resets CMD
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["%%CMD%%"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 
