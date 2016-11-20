@@ -1,0 +1,5 @@
+Host gitlab.family-pix.ovh
+  Hostname gitlab.family-pix.ovh
+  User git
+  Port 2206
+  PreferredAuthentications publickey
