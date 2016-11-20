@@ -46,6 +46,10 @@ RUN sed -i 's#votre_mdp_de_bdd#w0rdpressp@SS#' /app/wordpress/wp-config.php
 RUN sed -i 's#localhost#10.0.9.3#' /app/wordpress/wp-config.php
 
 EXPOSE 80
+<<<<<<< HEAD
 RUN /usr/local/bin/docker-entrypoint.sh
+=======
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+>>>>>>> 6e0590acfc60543a7f4fb8c3a006c9e613203680
 
 
