@@ -12,7 +12,7 @@ cat > .htaccess <<-'EOF'
   </IfModule>
   # END WordPress
 EOF
-chown www-data:www-data .htaccess
+chown apache:apache .htaccess
 
 # set apache as owner/group
 chown -R apache:apache /app
