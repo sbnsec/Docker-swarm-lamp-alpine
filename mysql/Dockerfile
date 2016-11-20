@@ -1,4 +1,4 @@
-FROM myregistrydomain.com:5000/
+FROM myregistrydomain.com:5000/alpine
 ENV INITRD no
 
 # Mise à jour du dépôt, et mise à jour du système d'exploitation
