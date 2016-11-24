@@ -46,5 +46,5 @@ EOF
   rm -f $tfile
 fi
 
-
+echo "[i] Starting daemon..."
 exec /usr/bin/mysqld --user=root --console

@@ -1,4 +1,3 @@
-
 # Source of the operating system
 FROM myregistrydomain.com:5000/alpine
 ENV INITRD no
@@ -12,30 +11,28 @@ RUN (apk add apache2 php5-apache2 curl php5-cli php5-json php5-openssl php5 apac
 # update tar package
 RUN apk --update add tar
 
-# Les's cleanup apt
+# cleanup apt
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /var/cache/apk/*
 
+# preparing apache environment
 RUN mkdir -p /run/apache2
 RUN rm /var/www/localhost/htdocs/index.html
+COPY httpd.conf /etc/apache2/
 
-WORKDIR /var/www/localhost/htdocs
-
-# set recommended PHP.ini settings
-# see https://secure.php.net/manual/en/opcache.installation.php
-
+# download and extract wordpress
 ENV WORDPRESS_VERSION "4.6.1-fr_FR"
 ENV WORDPRESS_MD5 "47698f1e8c41a024e38a2ee233fa076a"
-
 RUN set -x \
 	&& curl -o wordpress.tar.gz -fSL "https://fr.wordpress.org/wordpress-${WORDPRESS_VERSION}.tar.gz" \
 	&& tar -xzf wordpress.tar.gz --strip-components=1 -C /var/www/localhost/htdocs \
 	&& rm wordpress.tar.gz \
 	&& chown -R apache:apache /var/www/localhost/htdocs
 
-ADD docker-entrypoint.sh /usr/local/bin/
-COPY httpd.conf /etc/apache2/
+# copy the startup script of the container
+COPY scripts/run.sh /scripts/run.sh
+RUN chmod -R 755 /scripts
+RUN chmod +x /scripts/run.sh
 
 EXPOSE 80
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-CMD ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["/scripts/run.sh"]

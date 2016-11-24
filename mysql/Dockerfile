@@ -1,17 +1,24 @@
+# Source of the operating system
 FROM myregistrydomain.com:5000/alpine
 ENV INITRD no
 
-# Mise à jour du dépôt, et mise à jour du système d'exploitation
+# update repository and operating system
 RUN (apk update && apk upgrade -f -q)
-RUN apk add --update mysql mysql-client && rm -f /var/cache/apk/*
 
-WORKDIR /app
-VOLUME /app
+# install mysql
+RUN apk add --update mysql mysql-client
 
+# cleanup apt
+RUN rm -rf /var/lib/apt/lists/*
+RUN rm -rf /var/cache/apk/*
+
+# import mysql config file
+COPY my.cnf /etc/mysql/my.cnf
+
+# copy the startup script of the container
 COPY scripts/run.sh /scripts/run.sh
 RUN chmod -R 755 /scripts
-
-COPY my.cnf /etc/mysql/my.cnf
+RUN chmod +x /scripts/run.sh
 
 EXPOSE 3306
 CMD ["/scripts/run.sh"]

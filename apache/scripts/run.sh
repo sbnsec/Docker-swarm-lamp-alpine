@@ -1,13 +1,11 @@
 #!/bin/sh
 
-# set apache as owner/group
-if [ "$FIX_OWNERSHIP" != "" ]; then
-        chown -R apache:apache /app
-fi
+cat > /var/www/localhost/htdocs/.htaccess <<-'EOF'
+order allow,deny
+allow from all
+EOF
+
+chown -R apache:apache /var/www/localhost/htdocs
 
 echo "[i] Starting daemon..."
-# run apache httpd daemon
-#httpd -D FOREGROUND
 exec httpd -DFOREGROUND
-#while true; do sleep 1000; done
-
