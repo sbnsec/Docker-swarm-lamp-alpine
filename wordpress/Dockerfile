@@ -6,7 +6,7 @@ ENV INITRD no
 RUN (apk update && apk upgrade -f -q)
 
 #  install php apache and extenstion
-RUN (apk add apache2 php5-apache2 curl php5-cli php5-json php5-openssl php5 apache2-utils)
+RUN (apk add apache2 php5-apache2 curl php5-cli php5-json php5-openssl php5 apache2-utils php5-mysql)
 
 # update tar package
 RUN apk --update add tar
@@ -15,10 +15,11 @@ RUN apk --update add tar
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /var/cache/apk/*
 
-# preparing apache environment
+# preparing apache & PHP environment
 RUN mkdir -p /run/apache2
 RUN rm /var/www/localhost/htdocs/index.html
 COPY httpd.conf /etc/apache2/
+COPY php.ini /etc/php5/
 
 # download and extract wordpress
 ENV WORDPRESS_VERSION "4.6.1-fr_FR"
