@@ -12,6 +12,10 @@ RUN apk add --update mysql mysql-client
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /var/cache/apk/*
 
+# prepare mounting point
+WORKDIR /app
+VOLUME /app
+
 # import mysql config file
 COPY my.cnf /etc/mysql/my.cnf
 
