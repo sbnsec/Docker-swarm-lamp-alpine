@@ -5,10 +5,10 @@ ENV INITRD no
 # update repository and operating system
 RUN (apk update && apk upgrade -f -q)
 
-#  install php apache and extenstion
-RUN (apk add ca-certificates curl wget)
-RUN apk add -U gpgme 
 RUN apk add --update dpkg
+RUN (apk add ca-certificates curl wget)
+RUN apk add -U duplicity gpgme 
+
 RUN gpg || true
 RUN gpg \
     --keyserver hkp://ha.pool.sks-keyservers.net \
