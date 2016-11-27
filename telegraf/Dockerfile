@@ -2,27 +2,28 @@
 FROM myregistrydomain.com:5000/alpine
 ENV INITRD no
 
-# update repository and operating system
-RUN (apk update && apk upgrade -f -q)
-
-RUN apk add --update dpkg
-RUN (apk add ca-certificates curl wget)
-RUN apk add -U duplicity gpgme 
-
-RUN gpg || true
-RUN gpg \
-    --keyserver hkp://ha.pool.sks-keyservers.net \
-    --recv-keys 05CE15085FC09D18E99EFB22684A14CF2582E0C5
-
 ENV TELEGRAF_VERSION 1.1.1
-RUN wget -q https://dl.influxdata.com/telegraf/releases/telegraf_${TELEGRAF_VERSION}_amd64.deb.asc && \
-    wget -q https://dl.influxdata.com/telegraf/releases/telegraf_${TELEGRAF_VERSION}_amd64.deb && \
-    gpg --batch --verify telegraf_${TELEGRAF_VERSION}_amd64.deb.asc telegraf_${TELEGRAF_VERSION}_amd64.deb && \
-    dpkg -i telegraf_${TELEGRAF_VERSION}_amd64.deb && \
-    rm -f telegraf_${TELEGRAF_VERSION}_amd64.deb*
 
-EXPOSE 8125/udp 8092/udp 8094
+RUN apk add --no-cache ca-certificates && \
+    update-ca-certificates
 
-COPY entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+RUN apk add --no-cache --virtual .build-deps wget gnupg tar && \
+    gpg --keyserver hkp://ha.pool.sks-keyservers.net \
+        --recv-keys 05CE15085FC09D18E99EFB22684A14CF2582E0C5 && \
+    wget -q https://dl.influxdata.com/telegraf/releases/telegraf-${TELEGRAF_VERSION}-static_linux_amd64.tar.gz.asc && \
+    wget -q https://dl.influxdata.com/telegraf/releases/telegraf-${TELEGRAF_VERSION}-static_linux_amd64.tar.gz && \
+    gpg --batch --verify telegraf-${TELEGRAF_VERSION}-static_linux_amd64.tar.gz.asc telegraf-${TELEGRAF_VERSION}-static_linux_amd64.tar.gz && \
+    mkdir -p /usr/src /etc/telegraf && \
+    tar -C /usr/src -xzf telegraf-${TELEGRAF_VERSION}-static_linux_amd64.tar.gz && \
+    mv /usr/src/telegraf*/telegraf.conf /etc/telegraf/ && \
+    chmod +x /usr/src/telegraf*/* && \
+    cp -a /usr/src/telegraf*/* /usr/bin/ && \
+    rm -rf *.tar.gz* /usr/src /root/.gnupg && \
+apk del .build-deps
+
+
+COPY telegraf.conf /etc/telegraf/
+COPY outputs.conf /etc/telegraf/telegraf.d/
+COPY inputs_system.conf /etc/telegraf/telegraf.d/
+
 CMD ["telegraf"]
