@@ -23,7 +23,5 @@ apk del .build-deps
 
 
 COPY telegraf.conf /etc/telegraf/
-COPY outputs.conf /etc/telegraf/telegraf.d/
-COPY inputs_system.conf /etc/telegraf/telegraf.d/
 
 CMD ["telegraf"]
