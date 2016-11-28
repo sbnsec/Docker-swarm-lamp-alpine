@@ -73,6 +73,7 @@ sed -i 's#\#PermitRootLogin prohibit-password#PermitRootLogin yes#' /etc/ssh/ssh
 #################################################################
 #################################################################
 
+telegraf &
 
 echo "[i] Starting daemon..."
 exec /usr/bin/mysqld --user=root --console
