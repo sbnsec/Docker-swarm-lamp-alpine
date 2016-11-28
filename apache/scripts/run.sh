@@ -6,6 +6,7 @@ allow from all
 EOF
 
 chown -R apache:apache /var/www/localhost/htdocs
+telegraf &
 
 echo "[i] Starting daemon..."
 exec httpd -DFOREGROUND
