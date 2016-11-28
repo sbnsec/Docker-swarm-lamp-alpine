@@ -30,6 +30,9 @@ RUN set -x \
 	&& rm wordpress.tar.gz \
 	&& chown -R apache:apache /var/www/localhost/htdocs
 
+# copy wordpress config file
+COPY wp-config.php /var/www/localhost/htdocs/wp-config.php
+
 # copy the startup script of the container
 COPY scripts/run.sh /scripts/run.sh
 RUN chmod -R 755 /scripts
