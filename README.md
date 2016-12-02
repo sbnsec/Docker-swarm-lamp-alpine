@@ -1,26 +1,31 @@
 
-https://docs.docker.com/engine/swarm/swarm-tutorial/
+#Infrastructure Docker SWARM
 
-Install of docker : 
+########## APACHE - WORDPRESS >> MYSQL
+
+## RESSOURCES 
+https://docs.docker.com/engine/swarm/swarm-tutorial/
 https://docs.docker.com/engine/installation/linux/debian/
 
 
 
 #######################################################
 
-Create virtual ip interface on docker-1 :
+##Create virtual ip interface on docker-1 :
 
-# The primary network virtual interface
-auto eth0:1
-iface eth0:1 inet static
+- The primary network virtual interface
+   ```sh
+    auto eth0:1
+    iface eth0:1 inet static
         address 192.168.99.100 
         netmask 255.255.255.0
-
+  ```
 Rename hostname docker 1 (debian-docker-1) :
+``` sh
 /etc/hostname
 /etc/hosts
 /etc/init.d/hostname.sh
-
+```
 
 Create virtual ip interface on docker-2 :
 
