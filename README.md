@@ -64,7 +64,6 @@ iface eth0:1 inet static
 /etc/init.d/hostname.sh
 ```
 
-
 ---
 
 ### Create swarm :
@@ -85,7 +84,6 @@ docker node ls
 ```sh
 docker swarm join-token worker
 ```
-
 
 - Sur debian-docker-2 et debian-docker-3 :
 
@@ -219,9 +217,7 @@ docker tag alpine_wordpress myregistrydomain.com:5000/alpine_wordpress
 docker push myregistrydomain.com:5000/alpine_wordpress
 ```
 
-
 ---
-
 
 ### Start of the services :
 
@@ -258,7 +254,7 @@ docker service create	--name alpine_apache \
 docker run -p 3306:3306 -t -i -v /docker/mysql:/app alpine_mysql /bin/sh
 ```
 
-## Les mounts possible
+### Les mounts possible
 
 ```sh
 mount type=volume,source=mysql_data,target=/app/mysql \ # necessite : docker volume create --name mysql_data
@@ -266,7 +262,6 @@ mount type=bind,source=/docker/mysql,target=/app/mysql \
 ```
 
 ---
-
 
 ### Commandes utiles :
 ```sh
@@ -307,13 +302,11 @@ docker node update --availability drain worker1
 docker node update --availability active worker1
 docker node inspect --pretty worker1
 ```
-
+- Gérer le role des nodes :
 ```sh
-Gérer le role des nodes :
 docker node promote node-3
 docker node demote node-3
 ```
-
 - Enlever un noeud du swarm :
 ```sh
 docker swarm leave			(sur le node)
@@ -323,9 +316,8 @@ docker node rm node-2		(Sue un manager)
 ```sh
 docker rm -v $(docker ps -a -q -f status=exited)
 docker rm -v $(docker ps -a -q -f status=created)
-docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
+docker rmi $(docker images | grep none | awk "{print $3}")
 ```
-
 - Registry :
 ```sh
 docker pull alpine
@@ -333,22 +325,23 @@ docker tag alpine myregistrydomain.com:5000/alpine
 docker push myregistrydomain.com:5000/alpine
 docker pull myregistrydomain.com:5000/alpine
 ```
-
-- Network :
+- List & inspect Network :
 ```sh
 docker network ls 
 docker network inspect bridge
 ```
+- Create custom network
 ```sh
 docker network create \
   --driver overlay \
   --subnet 10.0.9.0/24 \
   network_01
 ```
+- Remove network
 ```sh
 docker network rm docker_gwbridge
 ```
-
+- To make deep debug intro docker and launch sshd
 ```sh
 echo "[i] Installation of openssh"
 apk update
