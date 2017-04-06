@@ -8,6 +8,10 @@
 
 [https://docs.docker.com/engine/installation/linux/debian/](Docs Docker)
 
+## SOS DEBUG 
+
+- Get a shell on a running container 
+`docker exec  -it <docker id>  /bin/bash`
 ---
 
 #### Create virtual ip interface on docker-1 :

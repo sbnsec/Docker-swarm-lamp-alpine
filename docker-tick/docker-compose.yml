@@ -1,0 +1,22 @@
+version: '2'
+
+networks:
+  default:
+    external:
+      name: shared_network
+
+services:
+  docker-tick:
+    build: .
+    volumes:
+      - ./etc/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - ./data/influxdb:/var/lib/influxdb
+      - ./data/chronograf:/var/lib/chronograf
+      - ./data/kapacitor:/var/lib/kapacitor
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "8088:8088"
+      - "8888:8888"
+    entrypoint:
+      - "/usr/local/bin/start.sh"
