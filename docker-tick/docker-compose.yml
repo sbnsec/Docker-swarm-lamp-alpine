@@ -1,7 +1,7 @@
-version: '2'
+version: "3"
 
 networks:
-  default:
+  shared_network:
     external:
       name: shared_network
 
@@ -20,3 +20,15 @@ services:
       - "8888:8888"
     entrypoint:
       - "/usr/local/bin/start.sh"
+    deploy:
+      mode: replicated
+      replicas: 2
+      resources:
+      # Hard limit - Docker does not allow to allocate more
+        limits:
+          cpus: '0.25'
+          memory: 512M
+      # Soft limit - Docker makes best effort to return to it
+        reservations:
+          cpus: '0.25'
+          memory: 256M
